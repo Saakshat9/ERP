@@ -4,6 +4,7 @@ const User = require('../models/User');
 const StudentFee = require('../models/StudentFee');
 const School = require('../models/School');
 const bcrypt = require('bcryptjs');
+const { generateIDCard } = require('./idCardController');
 
 // Generate unique student ID
 const generateStudentId = (schoolNamePrefix) => {
@@ -167,6 +168,15 @@ exports.addStudent = async (req, res) => {
       } else {
         console.log(`ℹ️ Parent User already exists: ${parentEmail}`);
       }
+    }
+
+    // Generate ID Card
+    try {
+      await generateIDCard(newStudent._id, 'Student', schoolId);
+      console.log(`✅ ID Card generated for student: ${studentId}`);
+    } catch (idCardError) {
+      console.error('Failed to generate ID card:', idCardError);
+      // Continue execution, do not fail the request
     }
 
     // Prepare response credentials

@@ -5,6 +5,7 @@ const { authenticateToken, requireSchoolAdmin } = require('../middleware/auth');
 const Teacher = require('../models/Teacher');
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
+const { generateIDCard } = require('../controllers/idCardController');
 
 // Get all teachers
 const getAllTeachers = async (req, res) => {
@@ -93,6 +94,15 @@ const addTeacher = async (req, res) => {
         console.error('Failed to send teacher credentials email:', emailError);
         emailStatus = 'failed';
       }
+    }
+
+    // Generate ID Card
+    try {
+      await generateIDCard(newTeacher._id, 'Teacher', schoolId);
+      console.log(`✅ ID Card generated for teacher: ${teacherId}`);
+    } catch (idCardError) {
+      console.error('Failed to generate ID card:', idCardError);
+      // Continue execution, do not fail the request
     }
 
     res.status(201).json({

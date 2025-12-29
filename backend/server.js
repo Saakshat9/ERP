@@ -100,6 +100,9 @@ const studentPortalRoutes = require('./src/routes/studentPortal');
 // Certificate routes
 const certificateRoutes = require('./src/routes/certificates');
 
+// ID Card routes
+const idCardRoutes = require('./src/routes/idCard');
+
 
 // CMS & Subscription routes
 const cmsRoutes = require('./src/routes/cms');
@@ -132,6 +135,7 @@ app.use('/api/timetable', timetableRoutes);
 app.use('/api/library', libraryRoutes);
 app.use('/api/hostel', hostelRoutes);
 app.use('/api/certificates', certificateRoutes);
+app.use('/api/id-cards', idCardRoutes);
 
 // Teacher & Parent portal routes
 app.use('/api/teacher', teacherPortalRoutes);
