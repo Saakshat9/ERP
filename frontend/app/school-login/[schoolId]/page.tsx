@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { GraduationCap, Mail, Lock, ArrowLeft, Building2, AlertCircle } from "lucide-react"
 import { toast } from "sonner"
-import { getApiUrl, API_ENDPOINTS } from "@/lib/api-config"
 
 interface School {
     _id: string
@@ -33,7 +32,7 @@ export default function SchoolLoginPage() {
                 // We can reuse the active schools list or fetch specific school details
                 // For now, we'll fetch all active and find the one matching ID since we don't have a public single school endpoint yet
                 // Optimization: Add a public single school endpoint later
-                const response = await fetch(getApiUrl(API_ENDPOINTS.SCHOOLS.ACTIVE))
+                const response = await fetch('http://localhost:5000/api/schools/active')
                 if (response.ok) {
                     const data = await response.json()
                     const foundSchool = data.schools.find((s: School) => s._id === schoolId)
@@ -61,7 +60,7 @@ export default function SchoolLoginPage() {
         setIsLoading(true)
 
         try {
-            const response = await fetch(getApiUrl(API_ENDPOINTS.AUTH.LOGIN), {
+            const response = await fetch("http://localhost:5000/api/auth/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -96,9 +95,7 @@ export default function SchoolLoginPage() {
             }
 
             const redirectRoute = roleRoutes[data.user.role] || "/dashboard/admin"
-            
-            // Use window.location for hard navigation
-            window.location.href = redirectRoute
+            router.push(redirectRoute)
         } catch (err) {
             toast.error(err instanceof Error ? err.message : "Login failed")
         } finally {
